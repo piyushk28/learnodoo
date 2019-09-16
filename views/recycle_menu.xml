@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flectra>
+  <data>
+    <!-- Top menu item -->
+  
+    <menuitem name="Recycle" id="recycle.menu_root"/>
+  
+    
+    <menuitem name="Inbound Orders" id="recycle.inbound_orders_menu" parent="recycle.menu_root"/>
+    
+
+
+
+
+   <!-- actions opening views on models -->
+    
+    <record model="ir.actions.act_window" id="recycle_list_action">
+      <field name="name">Schedule Inbound Orders</field>
+      <field name="res_model">recycle1.inbound_orders</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">Schedule The First Inbound Order.
+        </p>
+      </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="truck_list_action">
+        <field name="name">Trucks</field>
+        <field name="res_model">recycle.truck_types</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+    <record model="ir.actions.act_window" id="service_list_action">
+        <field name="name">Services</field>
+        <field name="res_model">recycle.service_types</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>              
+
+    <menuitem name="Inbound Orders" id="recycle.inbound_orders_list" parent="recycle.inbound_orders_menu"
+              action="recycle_list_action"/>
+
+
+    <menuitem id="service_menu" name="Services"
+          parent="recycle.menu_root"
+          action="service_list_action"/>
+
+
+    <menuitem id="truck_menu" name="Trucks"
+              parent="recycle.menu_root"
+              action="truck_list_action"/>
+
+  </data>
+</flectra>

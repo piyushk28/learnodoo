@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flectra>
+  <data>
+
+ 
+
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="recycle.list">
+      <field name="name">inbound_orders.form</field>
+      <field name="model">recycle1.inbound_orders</field>
+      <field name="arch" type="xml">
+      <form string="Schedule Inbound Orders" >
+      <!-- To remove edit and create button from form 
+        <form string="Schedule Inbound Orders" edit="false" create="false">
+        -->
+            <header>
+                  <button name='send_email_quotation' type='object' string= "Send By Email" class="btn btn-primary"/>
+                  <button name='get_report' type='object' string= "Create PDF" class="btn btn-primary"/>  
+            <field name="state" widget="statusbar"/>
+            </header>
+            
+            <sheet>
+            <field name="image" widget="image" class="oe_avatar" nolabel="1"/>
+              <group col="4">
+                  
+                  <field name="customer" />
+                  <field name="representative"/>
+                  <field name ="warehouse_id" />
+                  <field name="logistic_type"  widget='radio'/>
+              </group>
+              <group>
+                      <!-- <field name='recycle_address'/> -->
+                      <label for="street" string="Address"/>
+                      <div class="o_address_format">
+                          <field name="street" placeholder="Street..." class="o_address_street"/>
+                          <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                          <field name="city" placeholder="City" class="o_address_city"/>
+                          <field name="state_id" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                          <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                          <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                      </div>
+              </group>
+              <separator string="Preliminary Details"/>
+              <group col="4"> 
+                  <field name="bol"/>
+                  <field name="po"/>
+                  <field name="billing"/>
+                  <field name="service_type_id"/>
+                  <field name="internal_notes"/>
+              </group>
+              <notebook>
+                  <page string="Order Lines">
+                      <field  name="order_lines"
+                              widget="section_and_note_one2many" 
+                              mode="tree,kanban">
+                            <tree string="Order Lines" editable="bottom">
+                            <!-- <control>
+                                    <create
+                                      string="Add a product"
+                                    />
+                                    <create
+                                      string="Add a section"
+                                      context="{'default_display_type': 'line_section'}"
+                                    />
+                                    <create
+                                      string="Add a note"
+                                      context="{'default_display_type': 'line_note'}"
+                                    />
+                            </control> -->
+                                  <field name="product_id"/>
+                                  <field name="description"/>
+                                  <field name="quantity"/>
+                                  <field name="price"/>
+                                  <field name="tax_id" widget="many2many_tags"/>
+                            </tree>
+                      </field>
+                  </page>
+
+                  <page string="Pickup Details">
+                      <group col="4">
+                            <field name="truck_type_id"/>
+                            <field name="pickup_date_time"/>
+                      </group>
+
+                  </page>
+                  <page string="Contact Details">
+                      <group col="4">
+                            <field name="onside_contact_id" />
+                            <field name="alternative_contact_id" />
+                      </group>
+                  </page>
+                  <page string="Estimated Material and Weights">
+                      <group col="4">
+                            <field name="pallet_count" />
+                            <field name="total_weight" />
+                            <field name="package_type_id" />
+                            <field name="condition" />
+                            <field name="dimensions_length" />
+                            <field name="dimensions_width" />
+                            <field name="dimensions_height" />
+                      </group>
+                  </page>
+              </notebook>
+
+            </sheet>
+        </form>
+      </field>
+    </record>
+    
+
+  <!-- Inbound Orders Tree View -->
+    <record model="ir.ui.view" id="recycle_tree_view">
+      <field name="name">inbound_orders.tree</field>
+      <field name="model">recycle1.inbound_orders</field>
+      <field name="arch" type="xml">
+          <tree string="Course Tree">
+                  <field name="customer"/>
+                  <field name="representative"/>
+                  <!-- <field name="so_terms"/> -->
+                  <field name ="warehouse_id"/>
+                  <field name ="pickup_date_time"/>
+                  <field name ="truck_type_id"/>
+          </tree>
+      </field>
+      </record>
+
+
+    <!-- Inbound Orders Kanban View -->
+    <record model="ir.ui.view" id="recycle_kanban_view">
+      <field name="name">inbound_orders.tree</field>
+      <field name="model">recycle1.inbound_orders</field>
+      <field name="arch" type="xml">
+          <kanban string="Course Tree">
+                  <field name="id"/>
+                  <field name="customer"/>
+                  <field name ="warehouse_id"/>
+                  <field name ="truck_type_id"/>
+                  <field name ="pickup_date_time"/>
+                  <templates>
+                      <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+
+                                <div class="oe_kanban_details">
+                                    <div class="o_kanban_image float-right " style="height:130px; width:130px;" >
+                                        <img t-att-src="kanban_image('recycle1.inbound_orders', 'image',record.id.raw_value)" alt="Product"/>
+                                    </div>
+                                    <!-- <p class="text-center font-weight-bold oe_leftfit oe_rightfit" style="font-size:35px">
+                                    <field name="customer"/>
+                                    </p> -->
+                                    <h4 class="mb-4"><field name="customer"/></h4>
+                                    <!-- <hr/> -->
+                                <div t-if="record.warehouse_id.value">
+                                        <p  style="font-size:16px"><t t-esc="record.warehouse_id.value"/></p>
+                                </div>
+                                <div t-if="record.truck_type_id.value">
+                                   <p  style="font-size:16px"> <t t-esc="record.truck_type_id.value"/></p>
+                                </div>
+                                <div t-if="record.pickup_date_time.value">
+                                    <p  style="font-size:16px"><t t-esc="record.pickup_date_time.value"/></p>
+                                </div>
+                                
+                                               
+                                </div>
+
+                            </div>
+                      </t>
+                  </templates>
+          </kanban>
+      </field>
+      </record>
+
+
+  </data>
+</flectra>

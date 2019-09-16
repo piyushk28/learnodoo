@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+inbound_access_admin,recycle.inboundOrders,model_recycle1_inbound_orders,,1,1,1,1
+service_access_admin,recycle.serviceType,model_recycle_service_types,,1,1,1,1
+package_access_admin,recycle.packageTypes,model_recycle_package_types,,1,1,1,1
+trucks_access_admin,recycle.truckTypes,model_recycle_truck_types,,1,1,1,1
+inbound_lines_access_admin,recycle.inboundOrdersLines,model_recycle_inbound_orders_lines,,1,1,1,1
+

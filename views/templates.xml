@@ -1,0 +1,67 @@
+    <flectra>
+    <data>
+    <!-- <data noupdate= "1"> -->
+        <!-- <template  id="listing"> -->
+        <!--   <ul> -->
+        <!--     <li t-foreach="objects" t-as="object"> -->
+        <!--       <a t-attf-href="#{ root }/objects/#{ object.id }"> -->
+        <!--         <t t-esc="object.display_name"/> -->
+        <!--       </a> -->
+        <!--     </li> -->
+        <!--   </ul> -->
+        <!-- </template> -->
+        <!-- <template id="object"> -->
+        <!--   <h1><t t-esc="object.display_name"/></h1> -->
+        <!--   <dl> -->
+        <!--     <t t-foreach="object._fields" t-as="field"> -->
+        <!--       <dt><t t-esc="field"/></dt> -->
+        <!--       <dd><t t-esc="object[field]"/></dd> -->
+        <!--     </t> -->
+        <!--   </dl> -->
+        <!-- </template> -->
+
+Subject${object.company_id.name} Order (Ref ${object.name or 'n/a' })
+
+
+        <record id="inbound_quotation_email_template" model="mail.template">
+                <field name="name">RFQ -Send by Email </field>
+                <field name="email_from">${object.env.user.email}</field>
+                <field name="subject"> ${object.customer.name} Order (Ref ${object.name or 'n/a' })    
+                    <!-- Quotation for ${object.name} -->
+                </field>
+                <field name="email_to">${object.customer.email|safe}</field>
+                <field name="lang">${object.customer.lang}</field>
+                <field name="model_id" ref="model_recycle1_inbound_orders"/>
+                <field name="auto_delete" eval="True"/>
+                <field name="report_template" ref="inbound_order_quotation"/>
+                <field name="report_name">RFQ_${(object.name or '')}</field>
+                <field name="body_html">
+                    <![CDATA[
+                           <P> Dear,
+                                % if object.customer.is_company and object.customer.child_ids:
+                                    ${object.customer.child_ids[0].name}
+                                % else :
+                                    ${object.customer.name}
+                                % endif
+                           </p>
+                           <p>
+                                Here is, in attachment, a 'request for quotation' <strong>${object.name}</strong>
+                                amounting in <strong>12344</strong>
+                                from ${object.customer.name}.
+                            </p>
+                            <p>Do not hesitate to contact us if you have any further question.</p>
+                            <p>Best regards,</p>
+                            <p style="color:#888888;">
+                                    % if object.sudo().create_uid and object.sudo().create_uid.signature:
+                                    ${object.sudo().create_uid.signature | safe}
+                                % endif
+                            </p>
+                    ]]>
+
+
+                </field>
+        </record>
+
+
+    </data>
+</flectra>
